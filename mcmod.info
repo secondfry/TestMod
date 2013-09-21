@@ -1,0 +1,14 @@
+[{
+	"modid": "TestMod",
+	"name": "Fireworks for everyone",
+	"version": "0.1a20130921",
+	"credits": "@Second_Fry, @Steves_Carts",
+	"authors": [
+		"Second_Fry"],
+	"description": "Fireworks should be free and forever.",
+	"url": "",
+	"updateUrl": "",
+	"logoFile": "",
+	"parent": "",
+	"screenshots": []
+	}]
