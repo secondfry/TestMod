@@ -11,6 +11,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.secondfry.TestMod.ModInformation;
 import ru.secondfry.TestMod.blocks.BlockInfo;
+import ru.secondfry.TestMod.tileentities.TileEntityFirework;
 
 import java.util.List;
 
@@ -24,11 +25,12 @@ public class ItemDye extends Item {
 	public ItemDye(int itemID) {
 		super(itemID);
 		setMaxStackSize(ItemInfo.DYE_MAXSTACK);
+		setCreativeTab(CreativeTabs.tabRedstone);
+		setHasSubtypes(true);
 	}
 
 	@SideOnly(Side.CLIENT)
 	private Icon[] icons;
-
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -46,6 +48,11 @@ public class ItemDye extends Item {
 	@Override
 	public Icon getIconFromDamage(int dmg) {
 		return icons[dmg];
+	}
+
+	@Override
+	public int getMetadata(int dmg) {
+		return dmg;
 	}
 
 	@Override
@@ -68,6 +75,7 @@ public class ItemDye extends Item {
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && world.getBlockId(x, y, z) == BlockInfo.FIREWORK_ID) {
 			world.setBlockMetadataWithNotify(x, y, z, stack.getItemDamage(), 3); // Magic "3"
+			((TileEntityFirework) world.getBlockTileEntity(x, y, z)).setType(stack.getItemDamage());
 			stack.stackSize--;
 			return true;
 		} else {
