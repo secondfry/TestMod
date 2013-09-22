@@ -1,5 +1,8 @@
 package ru.secondfry.TestMod.blocks;
 
+import net.minecraft.block.Block;
+import ru.secondfry.TestMod.items.ItemInfo;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Rustam Second_Fry Gubaydullin
@@ -19,5 +22,6 @@ public class BlockInfo {
 	public static final String FIREWORK_TE_KEY = "fireworkTileEntity";
 	public static final int FIREWORK_TE_STACKLIMIT = 4;
 	public static final String FIREWORK_TE_NAME = "Rocket Launcher";
+	public static final int FIREWORK_TE_ITEMID = Block.anvil.blockID; //ItemInfo.ROCKET_ID;
 
 }
