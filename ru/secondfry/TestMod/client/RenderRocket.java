@@ -6,17 +6,19 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import ru.secondfry.TestMod.ModInformation;
 import ru.secondfry.TestMod.entities.EntityRocket;
 
 @SideOnly(Side.CLIENT)
 public class RenderRocket extends Render {
 
 	private int type = -1;
+	private static final String TEXTURE_LOCATION = ModInformation.ID.toLowerCase();
 
 	private static final ResourceLocation[] textures = new ResourceLocation[]{
-			new ResourceLocation("testmod", "textures/models/rocket1.png"),
-			new ResourceLocation("testmod", "textures/models/rocket2.png"),
-			new ResourceLocation("testmod", "textures/models/rocket3.png")
+			new ResourceLocation(TEXTURE_LOCATION, "textures/models/rocket1.png"),
+			new ResourceLocation(TEXTURE_LOCATION, "textures/models/rocket2.png"),
+			new ResourceLocation(TEXTURE_LOCATION, "textures/models/rocket3.png")
 	};
 
 	protected ModelRocket model;
@@ -45,9 +47,12 @@ public class RenderRocket extends Render {
 		this.renderRocket((EntityRocket) entity, x, y, z, yaw, partialTickTime);
 	}
 
-	//TODO return the correct id depending on the firework type
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return ((EntityRocket) entity).getType() == -1 ? textures[0] : textures[((EntityRocket) entity).getType()];
+		int type = ((EntityRocket) entity).getType();
+		if(type >= 0 && type <= textures.length)
+			return textures[type];
+		else
+			return textures[0];
 	}
 }

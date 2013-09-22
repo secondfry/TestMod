@@ -8,6 +8,6 @@ package ru.secondfry.TestMod.network;
 public class PacketInfo {
 
 	public static final byte SEND_PARTICLE = 0;
-	public static final byte SEND_ROCKET_SOUND = 1;
+	public static final byte SEND_ROCKET_INFO = 1;
 
 }

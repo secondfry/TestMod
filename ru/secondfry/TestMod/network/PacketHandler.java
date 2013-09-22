@@ -6,15 +6,15 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.logging.LogAgent;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.world.World;
 import ru.secondfry.TestMod.ModInformation;
 import ru.secondfry.TestMod.client.sounds.ESound;
+import ru.secondfry.TestMod.entities.EntityRocket;
 import ru.secondfry.TestMod.tileentities.TileEntityFirework;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,20 +30,26 @@ public class PacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput reader = ByteStreams.newDataInput(packet.data);
+		World world = ((EntityPlayer) player).worldObj;
 
 		int packetID = reader.readByte();
 		double xCoord = reader.readDouble();
 		double yCoord = reader.readDouble();
 		double zCoord = reader.readDouble();
 
-		switch(packetID) {
+		switch (packetID) {
 			case 0:
-				((EntityPlayer) player).worldObj.spawnParticle("reddust", xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle("reddust", xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, 0.0D, 0.0D, 0.0D);
 				break;
 			case 1:
 				Random myRandom = new Random();
 				float pitch = myRandom.nextFloat() - myRandom.nextFloat();
 				ESound.ROCKET_FIRED.play(xCoord, yCoord, zCoord, 1, pitch);
+
+				int rocketEntityID = reader.readInt();
+				int type = reader.readInt();
+				((EntityRocket) world.getEntityByID(rocketEntityID)).setType(type);
+
 				break;
 			default:
 				System.err.append("Unknown packet received!");
@@ -59,6 +65,15 @@ public class PacketHandler implements IPacketHandler {
 			dataStream.writeDouble(tileEntityFirework.xCoord);
 			dataStream.writeDouble(tileEntityFirework.yCoord);
 			dataStream.writeDouble(tileEntityFirework.zCoord);
+
+			switch (packetID) {
+				case 0:
+					break;
+				case 1:
+					dataStream.writeInt(tileEntityFirework.getRocketEntityID());
+					dataStream.writeInt(tileEntityFirework.getType());
+					break;
+			}
 
 			Packet myPacket = PacketDispatcher.getPacket(ModInformation.CHANNEL, byteStream.toByteArray());
 			PacketDispatcher.sendPacketToAllAround(tileEntityFirework.xCoord, tileEntityFirework.yCoord, tileEntityFirework.zCoord, 16D, dimID, myPacket);

@@ -1,15 +1,20 @@
 package ru.secondfry.TestMod.blocks;
 
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import ru.secondfry.TestMod.ModInformation;
+import ru.secondfry.TestMod.TestMod;
+import ru.secondfry.TestMod.client.interfaces.GuiInfo;
 import ru.secondfry.TestMod.tileentities.TileEntityFirework;
 
 import java.util.List;
@@ -54,12 +59,12 @@ public class BlockFirework extends BlockContainer {
 	public void registerIcons(IconRegister register) {
 		int i = 0;
 
-		topIcon = register.registerIcon(BlockInfo.TEXTURE_LOCALITION + ":" + BlockInfo.FIREWORK_TOP);
-		botIcon = register.registerIcon(BlockInfo.TEXTURE_LOCALITION + ":" + BlockInfo.FIREWORK_BOT);
+		topIcon = register.registerIcon(ModInformation.ID + ":" + BlockInfo.FIREWORK_TOP);
+		botIcon = register.registerIcon(ModInformation.ID + ":" + BlockInfo.FIREWORK_BOT);
 
 		typeIcons = new Icon[BlockInfo.FIREWORK_SIDES.length];
 		while (i < typeIcons.length) {
-			typeIcons[i] = register.registerIcon(BlockInfo.TEXTURE_LOCALITION + ":" + BlockInfo.FIREWORK_SIDES[i]);
+			typeIcons[i] = register.registerIcon(ModInformation.ID + ":" + BlockInfo.FIREWORK_SIDES[i]);
 			i++;
 		}
 	}
@@ -79,10 +84,25 @@ public class BlockFirework extends BlockContainer {
 		}
 	}
 
+	@Override
+	public TileEntity createTileEntity(World world, int meta) {
+		TileEntityFirework tileEntityFirework = new TileEntityFirework();
+		tileEntityFirework.setWorldObj(world);
+		tileEntityFirework.setType(meta);
+		return tileEntityFirework;
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileEntityFirework();
+		return null;
 	}
 
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) {
+			FMLNetworkHandler.openGui(player, TestMod.instance, GuiInfo.FIREWORK_ID, world, x, y, z);
+		}
+
+		return true;
+	}
 }

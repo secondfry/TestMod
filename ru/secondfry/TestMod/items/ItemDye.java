@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import ru.secondfry.TestMod.ModInformation;
 import ru.secondfry.TestMod.blocks.BlockInfo;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class ItemDye extends Item {
 		icons = new Icon[size];
 
 		while (i < size) {
-			icons[i] = register.registerIcon(ItemInfo.TEXTURE_LOCATION + ":" + ItemInfo.DYE_ICONS[i]);
+			icons[i] = register.registerIcon(ModInformation.ID + ":" + ItemInfo.DYE_ICONS[i]);
 			i++;
 		}
 	}

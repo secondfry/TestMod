@@ -7,8 +7,6 @@ package ru.secondfry.TestMod.blocks;
  */
 public class BlockInfo {
 
-	public static final String TEXTURE_LOCALITION = "testmod";
-
 	public static int FIREWORK_ID;
 	public static final String FIREWORK_KEY = "blockFirework";
 	public static final int FIREWORK_DEFAULT = 2701;
@@ -19,5 +17,7 @@ public class BlockInfo {
 	public static final String[] FIREWORK_SIDES = {"box_side_type1", "box_side_type2", "box_side_type3"};
 
 	public static final String FIREWORK_TE_KEY = "fireworkTileEntity";
+	public static final int FIREWORK_TE_STACKLIMIT = 4;
+	public static final String FIREWORK_TE_NAME = "Rocket Launcher";
 
 }

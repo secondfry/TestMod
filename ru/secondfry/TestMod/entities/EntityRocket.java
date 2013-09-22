@@ -3,7 +3,6 @@ package ru.secondfry.TestMod.entities;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import ru.secondfry.TestMod.blocks.BlockInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,14 +11,12 @@ import ru.secondfry.TestMod.blocks.BlockInfo;
  */
 public class EntityRocket extends Entity {
 
-	private final double start;
 	private int type = -1;
+	private int start = -1;
 
 	public EntityRocket(World world) {
 		super(world);
 		motionY = 0.5;
-		start = posY;
-		System.out.println(start);
 	}
 
 	@Override
@@ -30,20 +27,21 @@ public class EntityRocket extends Entity {
 			if (posY - start >= 10) {
 				setDead();
 			}
-		} else {
-			int xCoord = (int) (posX - 0.5F);
-			int yCoord = (int) posY;
-			int zCoord = (int) (posZ - 0.5F);
-			if (type == -1 && worldObj.getBlockId(xCoord, yCoord, zCoord) == BlockInfo.FIREWORK_ID) {
-				type = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			}
 		}
 
 		setPosition(posX + motionX, posY + motionY, posZ + motionZ);
 	}
 
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	public int getType() {
 		return type;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
 	}
 
 	@Override
