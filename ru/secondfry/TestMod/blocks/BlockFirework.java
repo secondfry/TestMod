@@ -14,7 +14,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.secondfry.TestMod.ModInformation;
 import ru.secondfry.TestMod.TestMod;
-import ru.secondfry.TestMod.client.interfaces.GuiInfo;
+// import ru.secondfry.TestMod.client.interfaces.GuiInfo;
 import ru.secondfry.TestMod.tileentities.TileEntityFirework;
 
 import java.util.List;
@@ -100,7 +100,7 @@ public class BlockFirework extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			FMLNetworkHandler.openGui(player, TestMod.instance, GuiInfo.FIREWORK_ID, world, x, y, z);
+			// FMLNetworkHandler.openGui(player, TestMod.instance, GuiInfo.FIREWORK_ID, world, x, y, z);
 		}
 
 		return true;
