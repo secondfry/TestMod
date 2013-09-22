@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import ru.secondfry.TestMod.blocks.Blocks;
+import ru.secondfry.TestMod.client.interfaces.GuiHandler;
 import ru.secondfry.TestMod.config.ConfigHandler;
 import ru.secondfry.TestMod.entities.Entities;
 import ru.secondfry.TestMod.items.Items;
@@ -37,6 +38,8 @@ public class TestMod {
 
 		proxy.initSounds();
 		proxy.initRenderers();
+
+		new GuiHandler();
 	}
 
 	@Mod.EventHandler
