@@ -1,6 +1,5 @@
 package ru.secondfry.TestMod.tileentities;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -9,7 +8,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import ru.secondfry.TestMod.blocks.BlockInfo;
 import ru.secondfry.TestMod.entities.EntityRocket;
-import ru.secondfry.TestMod.items.ItemInfo;
 import ru.secondfry.TestMod.network.PacketHandler;
 import ru.secondfry.TestMod.network.PacketInfo;
 
@@ -52,9 +50,9 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 	private int hasEnoughAmmo() {
 		int i = 0;
 
-		while(i < getSizeInventory()) {
+		while (i < getSizeInventory()) {
 			ItemStack itemStack = getStackInSlot(i);
-			if(itemStack != null && itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID) { // FIXME
+			if (itemStack != null && itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID) {
 				return i;
 			}
 			i++;
@@ -67,9 +65,9 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			int ammoSlotID = hasEnoughAmmo();
-			if(ammoSlotID >= 0 && ammoSlotID < getSizeInventory()) {
-				if(timer == 0) {
-					if(level < FIRE_ON) {
+			if (ammoSlotID >= 0 && ammoSlotID < getSizeInventory()) {
+				if (timer == 0) {
+					if (level < FIRE_ON) {
 						timer = CLOCK;
 						level++;
 						PacketHandler.sendPacket(this, worldObj.provider.dimensionId, PacketInfo.SEND_PARTICLE);
@@ -105,7 +103,7 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 		type = compound.getInteger("Type");
 
 		NBTTagList items = compound.getTagList("Items");
-		while(i < items.tagCount()) {
+		while (i < items.tagCount()) {
 			NBTTagCompound item = (NBTTagCompound) items.tagAt(i);
 			int slot = item.getByte("Slot");
 			if (slot >= 0 && slot < getSizeInventory()) {
@@ -127,7 +125,7 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 		compound.setInteger("Type", type);
 
 		NBTTagList items = new NBTTagList();
-		while(i < 3) {
+		while (i < 3) {
 			ItemStack itemStack = getStackInSlot(i);
 
 			if (itemStack != null) {
@@ -219,15 +217,15 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 		boolean isItemValid = false, q1, q2;
 
 		q1 = itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID;
-		if(getStackInSlot(i) != null)
+		if (getStackInSlot(i) != null)
 			q2 = getStackInSlot(i).stackSize < getInventoryStackLimit();
 		else
 			q2 = true;
 
-		if(q1 && q2)
+		if (q1 && q2)
 			isItemValid = true;
 
-		return isItemValid; // FIXME Rocket not Anvil
+		return isItemValid;
 	}
 
 }

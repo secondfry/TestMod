@@ -18,7 +18,7 @@ public class ItemInfo {
 	public static int ROCKET_ID;
 	public static final String ROCKET_KEY = "rocket";
 	public static final int ROCKET_DEFAULT = 27011;
-	public static final String ROCKET_UNLOCALIZED_NAME = "rocket";
+	public static final String ROCKET_UNLOCALIZED_NAME = "myepicrocket";
 	public static final String ROCKET_NAME = "Rocket";
 	public static final String ROCKET_ICON = ""; // TODO rocket icon
 	public static final int ROCKET_MAXSTACK = 16;

@@ -21,6 +21,7 @@ public class ConfigHandler {
 		BlockInfo.FIREWORK_ID = config.getBlock(BlockInfo.FIREWORK_KEY, BlockInfo.FIREWORK_DEFAULT).getInt();
 
 		ItemInfo.DYE_ID = config.getItem(ItemInfo.DYE_KEY, ItemInfo.DYE_DEFAULT).getInt() - 256;
+		ItemInfo.ROCKET_ID = config.getItem(ItemInfo.ROCKET_KEY, ItemInfo.ROCKET_DEFAULT).getInt() - 256;
 
 		config.save();
 	}

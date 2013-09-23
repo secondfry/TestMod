@@ -1,6 +1,5 @@
 package ru.secondfry.TestMod.client.interfaces;
 
-import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -26,14 +25,14 @@ public class SlotRocket extends Slot {
 		boolean isItemValid = false, q1, q2;
 
 		q1 = itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID;
-		if(getStack() != null)
+		if (getStack() != null)
 			q2 = getStack().stackSize < getSlotStackLimit();
 		else
 			q2 = true;
 
-		if(q1 && q2)
+		if (q1 && q2)
 			isItemValid = true;
 
-		return isItemValid; // FIXME Rocket not Anvil
+		return isItemValid;
 	}
 }
