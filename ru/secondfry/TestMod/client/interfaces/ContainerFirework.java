@@ -19,16 +19,16 @@ public class ContainerFirework extends Container {
 	private void addSlotsForPlayerInventory(InventoryPlayer inventoryPlayer) {
 		int x = 0, y;
 
-		while(x < 9) {
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + 18*x, 130));
+		while (x < 9) {
+			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + 18 * x, 130));
 			x++;
 		}
 
 		y = 0;
-		while(y < 3) {
+		while (y < 3) {
 			x = 0;
-			while(x < 9) {
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + 18*x, 72 + 18*y));
+			while (x < 9) {
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + 18 * x, 72 + 18 * y));
 				x++;
 			}
 			y++;
@@ -42,8 +42,8 @@ public class ContainerFirework extends Container {
 
 		addSlotsForPlayerInventory(inventoryPlayer);
 
-		while(x < 3) {
-			addSlotToContainer(new SlotRocket(tileEntityFirework, x, 8 + 18*x, 17));
+		while (x < 3) {
+			addSlotToContainer(new SlotRocket(tileEntityFirework, x, 8 + 18 * x, 17));
 			x++;
 		}
 	}

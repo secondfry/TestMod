@@ -112,12 +112,12 @@ public class BlockFirework extends BlockContainer {
 	public void breakBlock(World world, int x, int y, int z, int blockID, int meta) {
 		int i = 0;
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		if(tileEntity != null && tileEntity instanceof IInventory) {
+		if (tileEntity != null && tileEntity instanceof IInventory) {
 			IInventory inventory = (IInventory) tileEntity;
 
-			while(i < inventory.getSizeInventory()) {
+			while (i < inventory.getSizeInventory()) {
 				ItemStack itemStack = inventory.getStackInSlotOnClosing(i);
-				if(itemStack != null) {
+				if (itemStack != null) {
 					float spawnX = x + world.rand.nextFloat();
 					float spawnY = y + world.rand.nextFloat();
 					float spawnZ = z + world.rand.nextFloat();
