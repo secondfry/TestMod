@@ -16,6 +16,10 @@ public class ContainerFirework extends Container {
 
 	private TileEntityFirework tileEntityFirework;
 
+	public TileEntityFirework getTileEntityFirework() {
+		return tileEntityFirework;
+	}
+
 	private void addSlotsForPlayerInventory(InventoryPlayer inventoryPlayer) {
 		int x = 0, y;
 

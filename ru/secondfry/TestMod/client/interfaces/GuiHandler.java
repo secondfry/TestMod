@@ -22,7 +22,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		switch (ID) {
-			case GuiInfo.FIREWORK_ID:
+			case GuiInfo.GUI_FIREWORK_ID:
 				TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 				if (tileEntity != null && tileEntity instanceof TileEntityFirework) {
 					return new ContainerFirework(player.inventory, (TileEntityFirework) tileEntity);
@@ -36,7 +36,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		switch (ID) {
-			case GuiInfo.FIREWORK_ID:
+			case GuiInfo.GUI_FIREWORK_ID:
 				TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 				if (tileEntity != null && tileEntity instanceof TileEntityFirework) {
 					return new GuiFirework(player.inventory, (TileEntityFirework) tileEntity);

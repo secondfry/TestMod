@@ -102,7 +102,7 @@ public class BlockFirework extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			FMLNetworkHandler.openGui(player, TestMod.instance, GuiInfo.FIREWORK_ID, world, x, y, z);
+			FMLNetworkHandler.openGui(player, TestMod.instance, GuiInfo.GUI_FIREWORK_ID, world, x, y, z);
 		}
 
 		return true;
