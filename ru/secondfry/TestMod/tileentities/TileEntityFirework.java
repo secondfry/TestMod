@@ -1,12 +1,13 @@
 package ru.secondfry.TestMod.tileentities;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import ru.secondfry.TestMod.blocks.BlockInfo;
+import ru.secondfry.TestMod.client.interfaces.GuiInfo;
 import ru.secondfry.TestMod.entities.EntityRocket;
 import ru.secondfry.TestMod.network.PacketHandler;
 import ru.secondfry.TestMod.network.PacketInfo;
@@ -25,6 +26,15 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 	private byte level;
 	private int type;
 	private int rocketEntityID;
+	private boolean suspended;
+
+	public boolean isSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(boolean suspended) {
+		this.suspended = suspended;
+	}
 
 	private ItemStack[] items;
 
@@ -47,25 +57,43 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 		return rocketEntityID;
 	}
 
+	private int hasEnoughAmmo() {
+		int i = 0;
+
+		while (i < getSizeInventory()) {
+			ItemStack itemStack = getStackInSlot(i);
+			if (itemStack != null && itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID) {
+				return i;
+			}
+			i++;
+		}
+
+		return -1;
+	}
+
 	@Override
 	public void updateEntity() {
-		if (!worldObj.isRemote) {
-			if (timer == 0 && level < FIRE_ON) {
-				timer = CLOCK;
-				level++;
-				PacketHandler.sendPacket(this, worldObj.provider.dimensionId, PacketInfo.SEND_PARTICLE);
-			} else if (timer == 0 && level == FIRE_ON) {
-				timer = CLOCK;
-				level = 0;
-				EntityRocket rocket = new EntityRocket(worldObj);
-				rocket.setType(getType());
-				rocket.setStart(yCoord);
-				rocket.posX = xCoord + 0.5F;
-				rocket.posY = yCoord;
-				rocket.posZ = zCoord + 0.5F;
-				worldObj.spawnEntityInWorld(rocket);
-				this.rocketEntityID = rocket.entityId;
-				PacketHandler.sendPacket(this, worldObj.provider.dimensionId, PacketInfo.SEND_ROCKET_INFO);
+		int ammoSlotID = hasEnoughAmmo();
+		if (!worldObj.isRemote && ammoSlotID >= 0 && ammoSlotID < getSizeInventory() && !suspended) {
+			if (timer == 0) {
+				if (level < FIRE_ON) {
+					timer = CLOCK;
+					level++;
+					PacketHandler.sendFireworkPacket(PacketInfo.SEND_PARTICLE, this, worldObj.provider.dimensionId);
+				} else if (level == FIRE_ON) {
+					timer = CLOCK;
+					level = 0;
+					EntityRocket rocket = new EntityRocket(worldObj);
+					rocket.setType(getType());
+					rocket.setStart(yCoord);
+					rocket.posX = xCoord + 0.5F;
+					rocket.posY = yCoord;
+					rocket.posZ = zCoord + 0.5F;
+					worldObj.spawnEntityInWorld(rocket);
+					decrStackSize(ammoSlotID, 1);
+					this.rocketEntityID = rocket.entityId;
+					PacketHandler.sendFireworkPacket(PacketInfo.SEND_ROCKET_INFO, this, worldObj.provider.dimensionId);
+				}
 			}
 			timer--;
 		}
@@ -75,20 +103,50 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 
+		int i = 0;
+
 		timer = compound.getShort("Timer");
 		level = compound.getByte("Level");
 		rocketEntityID = compound.getInteger("RocketEntityID");
 		type = compound.getInteger("Type");
+		suspended = compound.getBoolean("Suspended");
+
+		NBTTagList items = compound.getTagList("Items");
+		while (i < items.tagCount()) {
+			NBTTagCompound item = (NBTTagCompound) items.tagAt(i);
+			int slot = item.getByte("Slot");
+			if (slot >= 0 && slot < getSizeInventory()) {
+				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
+			}
+			i++;
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 
+		int i = 0;
+
 		compound.setShort("Timer", timer);
 		compound.setByte("Level", level);
 		compound.setInteger("RocketEntityID", rocketEntityID);
 		compound.setInteger("Type", type);
+		compound.setBoolean("Suspended", suspended);
+
+		NBTTagList items = new NBTTagList();
+		while (i < 3) {
+			ItemStack itemStack = getStackInSlot(i);
+
+			if (itemStack != null) {
+				NBTTagCompound item = new NBTTagCompound();
+				item.setByte("Slot", (byte) i);
+				itemStack.writeToNBT(item);
+				items.appendTag(item);
+			}
+			i++;
+		}
+		compound.setTag("Items", items);
 	}
 
 	// Inventory part
@@ -165,8 +223,29 @@ public class TileEntityFirework extends TileEntity implements IInventory {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return itemstack.itemID == Block.anvil.blockID;
+	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		boolean isItemValid = false, q1, q2;
+
+		q1 = itemStack.itemID == BlockInfo.FIREWORK_TE_ITEMID;
+		if (getStackInSlot(i) != null)
+			q2 = getStackInSlot(i).stackSize < getInventoryStackLimit();
+		else
+			q2 = true;
+
+		if (q1 && q2)
+			isItemValid = true;
+
+		return isItemValid;
 	}
 
+	public void receiveButtonEvent(int buttonID) {
+		switch (buttonID) {
+			case GuiInfo.BUTTON_DISABLE_ID:
+				suspended = true;
+				break;
+			case GuiInfo.BUTTON_ENABLE_ID:
+				suspended = false;
+				break;
+		}
+	}
 }

@@ -9,5 +9,6 @@ public class PacketInfo {
 
 	public static final byte SEND_PARTICLE = 0;
 	public static final byte SEND_ROCKET_INFO = 1;
+	public static final byte SEND_BUTTON = 2;
 
 }

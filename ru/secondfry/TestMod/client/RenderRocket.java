@@ -50,7 +50,7 @@ public class RenderRocket extends Render {
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		int type = ((EntityRocket) entity).getType();
-		if(type >= 0 && type <= textures.length)
+		if (type >= 0 && type <= textures.length)
 			return textures[type];
 		else
 			return textures[0];

@@ -13,9 +13,11 @@ import net.minecraft.item.ItemStack;
 public class Items {
 
 	public static Item itemDye;
+	public static Item itemRocket;
 
 	public static void init() {
 		itemDye = new ItemDye(ItemInfo.DYE_ID);
+		itemRocket = new ItemRocket(ItemInfo.ROCKET_ID);
 	}
 
 	public static void addNames() {
@@ -25,16 +27,20 @@ public class Items {
 			LanguageRegistry.addName(new ItemStack(itemDye, 1, i), ItemInfo.DYE_NAMES[i]);
 			i++;
 		}
+		LanguageRegistry.addName(itemRocket, ItemInfo.ROCKET_NAME);
 	}
 
 	public static void registerRecipes() {
-		int i = 0, next = 1, size = ItemInfo.DYE_NAMES.length;
-		while (i < size) {
-			if (i == size - 1) next = 0;
+		int i = 0, next = 1, dyeSize = ItemInfo.DYE_NAMES.length;
+
+		while (i < dyeSize) {
+			if (i == dyeSize - 1) next = 0;
 			GameRegistry.addShapelessRecipe(new ItemStack(itemDye, 1, next), new ItemStack(itemDye, 1, i));
 			i++;
 			next++;
 		}
+
+		// TODO add rocket recipe
 	}
 
 }
